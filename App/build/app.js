@@ -7669,7 +7669,8 @@ var defaultOptions = {
 };
 
 var isAjax = function isAjax(request) {
-    return request.getResponseHeader('content-type').indexOf('application/json') > -1;
+    var contentType = request && request.getResponseHeader('content-type');
+    return contentType && contentType.indexOf('application/json') > -1;
 };
 
 var getErrorHandler = function getErrorHandler(url) {

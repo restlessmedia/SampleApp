@@ -3,7 +3,8 @@ const defaultOptions = {
 };
 
 const isAjax = (request) => {
-    return request.getResponseHeader('content-type').indexOf('application/json') > -1;
+    const contentType = request && request.getResponseHeader('content-type');
+    return contentType && contentType.indexOf('application/json') > -1;
 }
 
 const getErrorHandler = function (url) {
