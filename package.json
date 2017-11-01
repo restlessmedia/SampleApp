@@ -1,0 +1,67 @@
+{
+  "name": "sampleapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "gulp": "gulp",
+    "start": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015",
+            "stage-0",
+            "stage-2"
+          ],
+          "plugins": [
+            "babel-plugin-syntax-jsx",
+            "babel-plugin-inferno",
+            "inferno"
+          ]
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "inferno": "*",
+    "inferno-redux": "*",
+    "inferno-router": "*",
+    "redux": "*",
+    "redux-thunk": "*"
+  },
+  "devDependencies": {
+    "event-stream": "*",
+    "envify": "*",
+    "gulp": "*",
+    "gulp-if": "*",
+    "gulp-msbuild": "*",
+    "gulp-sass": "*",
+    "gulp-uglify": "*",
+    "gulp-util": "*",
+    "gulp-watch": "*",
+    "babel-core": "*",
+    "babel-plugin-inferno": "*",
+    "babel-plugin-syntax-jsx": "*",
+    "babel-plugin-add-module-exports": "*",
+    "babel-plugin-external-helpers": "*",
+    "babel-plugin-external-helpers-2": "*",
+    "babel-plugin-transform-runtime": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-es2015-riot": "*",
+    "babel-preset-stage-0": "*",
+    "babel-preset-stage-2": "*",
+    "babel-runtime": "*",
+    "babelify": "*",
+    "browserify": "*",
+    "vinyl-buffer": "*",
+    "vinyl-source-stream": "*",
+    "watchify": "*",
+    "uglifyify": "*"
+  }
+}
