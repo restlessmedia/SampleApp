@@ -86,7 +86,7 @@ export const getById = (id) => (dispatch, getState) =>
 
 export const save = (contact, id) => (dispatch) =>
     new Promise((resolve, reject) => {
-        dispatch(loading(false));
+        dispatch(loading(true));
         ajax.post(`api/contact/${id}`, contact)
             .then((response) => {
                 dispatch(itemDataLoaded(response));
