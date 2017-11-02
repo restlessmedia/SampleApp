@@ -1,10 +1,10 @@
 # SampleApp
 
-## To build
+## To run
 
-Ensure all nuget packages are installed.
+Ensure all nuget packages are installed for solution and debug via Visual Studio or deploying /App/ to IIS.
 
-/build/ folder contains files necessary to run index.html, to build the files from source, run 'npm install' to install all dependant modules then run 'npm start' to build css and js files.
+The /App/build/ folder contains all client-side files necessary to run index.html.  To modify and build the files from source, run 'npm install' at the root to install all dependant modules then run 'npm start' to build css and js files.
 
 ## Highlights
 
@@ -12,9 +12,12 @@ Ensure all nuget packages are installed.
 
 Inferno js used for client side view framework with Redux for state management.  Gulp for client side build with browserify, uglify to package up the javascript.
 
+Bootstrap 4 used to provide a quick theme.
+
 ## TODO
 
 - Tidy up/unify client-side error handling
 - Unit-tests (client & server-side)
 - Bootstrap as a npm dependency to customise build and reduce download footprint
-- Theme & styling
+- Rip out bootstrap and add bespoke styling
+- Add BindAs attributes for the Api action results returning interfaces
