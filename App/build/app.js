@@ -7647,7 +7647,7 @@ var getById = exports.getById = function getById(id) {
 var save = exports.save = function save(contact, id) {
     return function (dispatch) {
         return new Promise(function (resolve, reject) {
-            dispatch(loading(false));
+            dispatch(loading(true));
             _ajax2.default.post('api/contact/' + id, contact).then(function (response) {
                 dispatch(itemDataLoaded(response));
                 dispatch(itemLoaded());
@@ -7857,7 +7857,7 @@ var routes = createVNode(16, _infernoRedux.Provider, null, null, {
 
 _inferno2.default.render(routes, document.getElementById('app'));
 
-},{"./actions":46,"./components/App.jsx":49,"./components/Contact.jsx":50,"./components/Contacts.jsx":51,"./reducer":52,"history/createHashHistory":4,"inferno":16,"inferno-redux":12,"inferno-router":14,"redux":37,"redux-thunk":31}],49:[function(require,module,exports){
+},{"./actions":46,"./components/App.jsx":49,"./components/Contact.jsx":50,"./components/Contacts.jsx":51,"./reducer":53,"history/createHashHistory":4,"inferno":16,"inferno-redux":12,"inferno-router":14,"redux":37,"redux-thunk":31}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8091,6 +8091,10 @@ var _actions = require('../actions');
 
 var _infernoRouter = require('inferno-router');
 
+var _Modal = require('./Modal');
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8101,43 +8105,107 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var createVNode = _inferno2.default.createVNode;
 
-var Contacts = function (_Component) {
-    _inherits(Contacts, _Component);
+var ContactCard = function (_Component) {
+    _inherits(ContactCard, _Component);
 
-    function Contacts(props) {
-        _classCallCheck(this, Contacts);
+    function ContactCard(props) {
+        _classCallCheck(this, ContactCard);
 
-        var _this = _possibleConstructorReturn(this, (Contacts.__proto__ || Object.getPrototypeOf(Contacts)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (ContactCard.__proto__ || Object.getPrototypeOf(ContactCard)).call(this, props));
 
-        if (!props.data) {
-            _this.props.list();
-        }
+        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
 
-    _createClass(Contacts, [{
-        key: 'renderItem',
-        value: function renderItem(contact) {
-            var url = 'contact/' + contact.contactId;
-            return createVNode(2, 'div', 'media', [createVNode(2, 'img', 'mr-3'), createVNode(2, 'div', 'media-body', [createVNode(2, 'h5', 'mt-0', contact.fullName), contact.homeNumber, ' / ', contact.mobileNumber, createVNode(2, 'p', null, createVNode(16, _infernoRouter.Link, null, null, {
-                'to': url,
-                children: 'Edit'
-            }))])]);
+    _createClass(ContactCard, [{
+        key: 'handleClick',
+        value: function handleClick(contact) {
+            this.props.onClick && this.props.onClick(this.props.contact);
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            if (!this.props.contact) {
+                return;
+            }
 
+            return createVNode(2, 'div', 'media-body', [createVNode(2, 'div', 'icon icon-person'), createVNode(2, 'h5', 'mt-0', this.props.onClick ? createVNode(2, 'a', null, this.props.contact.fullName, {
+                'href': 'javascript:void',
+                'onClick': this.handleClick
+            }) : this.props.contact.fullName), this.props.contact.homeNumber, ' / ', this.props.contact.mobileNumber]);
+        }
+    }]);
+
+    return ContactCard;
+}(_infernoComponent2.default);
+
+var Contacts = function (_Component2) {
+    _inherits(Contacts, _Component2);
+
+    function Contacts(props) {
+        _classCallCheck(this, Contacts);
+
+        var _this2 = _possibleConstructorReturn(this, (Contacts.__proto__ || Object.getPrototypeOf(Contacts)).call(this, props));
+
+        if (!props.data) {
+            _this2.props.list();
+        }
+        _this2.handleModalClose = _this2.handleModalClose.bind(_this2);
+        _this2.view = _this2.view.bind(_this2);
+        _this2.state = {
+            contact: null
+        };
+        return _this2;
+    }
+
+    _createClass(Contacts, [{
+        key: 'view',
+        value: function view(contact) {
+            this.setState({ contact: contact });
+        }
+    }, {
+        key: 'renderItem',
+        value: function renderItem(contact) {
+            var url = 'contact/' + contact.contactId;
+            return createVNode(2, 'div', 'media', [createVNode(2, 'img', 'mr-3'), createVNode(16, ContactCard, null, null, {
+                'contact': contact,
+                'onClick': this.view
+            }), createVNode(2, 'button', null, createVNode(16, _infernoRouter.Link, null, null, {
+                'to': url,
+                children: 'Edit'
+            }))]);
+        }
+    }, {
+        key: 'handleModalClose',
+        value: function handleModalClose() {
+            this.view(null);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            if (this.props.fetching) {
+                return createVNode(2, 'p', null, 'Loading...');
+            }
             if (!this.props.data) {
                 return createVNode(2, 'p', null, 'No data');
             }
 
             var list = Object.keys(this.props.data).map(function (key) {
-                return _this2.props.data[key];
+                return _this3.props.data[key];
             });
 
-            return createVNode(2, 'div', 'contacts', [createVNode(2, 'div', 'jumbotron', createVNode(2, 'h1', 'display-3', 'All Contacts')), list.map(this.renderItem)]);
+            return createVNode(2, 'div', 'contacts', [createVNode(16, _Modal2.default, null, null, {
+                'title': 'View Contact',
+                'visible': this.state.contact !== null,
+                'onClose': this.handleModalClose,
+                children: createVNode(16, ContactCard, null, null, {
+                    'contact': this.state.contact
+                })
+            }), createVNode(2, 'div', 'jumbotron', createVNode(2, 'h1', 'display-3', 'All Contacts')), list.map(function (contact) {
+                return _this3.renderItem(contact);
+            })]);
         }
     }]);
 
@@ -8161,7 +8229,91 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 exports.default = (0, _infernoRedux.connect)(mapStateToProps, mapDispatchToProps)(Contacts);
 
-},{"../actions":46,"inferno":16,"inferno-component":8,"inferno-redux":12,"inferno-router":14}],52:[function(require,module,exports){
+},{"../actions":46,"./Modal":52,"inferno":16,"inferno-component":8,"inferno-redux":12,"inferno-router":14}],52:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _inferno = require('inferno');
+
+var _inferno2 = _interopRequireDefault(_inferno);
+
+var _infernoComponent = require('inferno-component');
+
+var _infernoComponent2 = _interopRequireDefault(_infernoComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var createVNode = _inferno2.default.createVNode;
+
+var _class = function (_Component) {
+    _inherits(_class, _Component);
+
+    function _class(props) {
+        _classCallCheck(this, _class);
+
+        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+        _this.state = {
+            visible: false
+        };
+        _this.close = _this.close.bind(_this);
+        return _this;
+    }
+
+    _createClass(_class, [{
+        key: 'close',
+        value: function close() {
+            this.setState({ visible: false });
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            if (nextProps.visible !== this.state.visible) {
+                this.setState({ visible: nextProps.visible });
+            }
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            if (this.state.visible) {
+                document.body.classList.add('modal-open');
+            } else {
+                document.body.classList.remove('modal-open');
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var className = 'modal ' + (this.state.visible ? 'show' : 'null');
+            return createVNode(2, 'div', className, createVNode(2, 'div', 'modal-dialog', createVNode(2, 'div', 'modal-content', [createVNode(2, 'div', 'modal-header', [this.props.title ? createVNode(2, 'h5', 'modal-title', this.props.title) : null, createVNode(2, 'button', 'close', createVNode(2, 'span', null, '\xD7', {
+                'aria-hidden': 'true'
+            }), {
+                'type': 'button',
+                'onClick': this.close
+            })]), createVNode(2, 'div', 'modal-body', this.props.children), createVNode(2, 'div', 'modal-footer', createVNode(2, 'button', 'btn btn-secondary', 'Close', {
+                'type': 'button',
+                'onClick': this.close
+            }))])));
+        }
+    }]);
+
+    return _class;
+}(_infernoComponent2.default);
+
+exports.default = _class;
+
+},{"inferno":16,"inferno-component":8}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

@@ -1,0 +1,10 @@
+.contacts {
+    .media {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+    }
+    h5 a {
+        @extend .btn-link;
+    }
+}

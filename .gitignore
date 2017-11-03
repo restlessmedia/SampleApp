@@ -1,0 +1,11 @@
+
+*.pdb
+*.dll
+App/bin
+App/obj
+App.Tests/bin
+App.Tests/obj
+node_modules
+packages
+.vs
+package-lock.json
