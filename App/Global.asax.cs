@@ -17,6 +17,8 @@ namespace App
       builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
       IContainer container = builder.Build();
       GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+      
+      // set a custom formatter so we can provide camal case json to the client
       GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.JsonFormatter);
       GlobalConfiguration.Configuration.Formatters.Insert(0, new JsonNetFormatter());
     }
