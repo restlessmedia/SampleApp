@@ -4,6 +4,7 @@
   {
     public Contact() { }
 
+    // this constructor serves as a cheap way to DTO
     public Contact(IContact contact)
       : this()
     {
