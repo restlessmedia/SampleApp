@@ -25,9 +25,6 @@ const dispatchLocationChange = (location) => store.dispatch(locationChange(locat
 dispatchLocationChange(history.location);
 history.listen(dispatchLocationChange);
 
-// listen to history changes so we can update the listen and update the nav ui states when the route changes
-history.listen((location) => store.dispatch(locationChange(location)));
-
 const routes = (
   <Provider store={store}>
     <Router history={history}>
