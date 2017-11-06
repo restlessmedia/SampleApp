@@ -6,10 +6,12 @@ using System.Web;
 
 namespace App.Models.ViewModel
 {
+  // we don't return data models back to the client - this serves as the model the view is concerned with
   public class ContactViewModel : IContact
   {
     public ContactViewModel() { }
 
+    // this constructor serves as a cheap way to DTO
     public ContactViewModel(IContact contact)
     {
       ContactId = contact.ContactId;
